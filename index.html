@@ -1,114 +1,53 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نواة توكن - السك الأولي</title>
-  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f9f9f9; margin:0; padding:0; }
-    header { background: #1a1a1a; color: #fff; padding: 1rem; text-align: center; }
-    main { padding: 2rem; max-width: 600px; margin: auto; background: #fff; margin-top:2rem; border-radius: 12px; box-shadow:0 0 15px rgba(0,0,0,0.1); }
-    button { padding: 0.7rem 1.5rem; background: #ffb400; border:none; border-radius: 8px; cursor:pointer; font-weight:bold; margin-top:0.5rem; }
-    input { padding:0.5rem; width:100%; margin-bottom:1rem; border-radius:6px; border:1px solid #ccc; }
-    select { padding:0.5rem; width:100%; margin-bottom:1rem; border-radius:6px; border:1px solid #ccc; }
-    .status { margin-top:1rem; font-weight:bold; }
-    .token-left { margin-bottom:1rem; font-weight:bold; }
-    a { color: #1a73e8; text-decoration:none; }
-  </style>
+<meta charset="UTF-8">
+<title>صفحة السك – نواه توكن</title>
+<style>
+  body { font-family: Arial, sans-serif; direction: rtl; background-color: #f9f9f9; padding: 20px; }
+  h1, h2 { text-align: center; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+  .card { background: white; padding: 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+  .card img { max-width: 100%; border-radius: 5px; cursor: pointer; transition: transform 0.2s; }
+  .card img:hover { transform: scale(1.05); }
+  .card a { display: block; margin-top: 5px; color: #007bff; text-decoration: none; }
+  .card a:hover { text-decoration: underline; }
+  /* Lightbox */
+  #lightbox { position: fixed; display: none; justify-content: center; align-items: center; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; }
+  #lightbox img { max-width: 90%; max-height: 90%; border-radius: 10px; }
+</style>
 </head>
 <body>
-  <header>
-    <h1>نواة توكن - السك الأولي</h1>
-  </header>
 
-  <main>
-    <p>اشترِ NWTK الآن في المرحلة المبكرة وكن جزءًا من مشروع Nawah Token.</p>
-    
-    <div class="token-left" id="tokensLeft">التوكنات المتبقية للبيع: 1000000</div>
+<h1>صفحة السك – نواه توكن</h1>
 
-    <label for="amount">عدد التوكنات المراد شراؤها:</label>
-    <input type="number" id="amount" placeholder="مثال: 100" min="1">
+<h2>معرض الشعارات والصور</h2>
+<div class="grid">
+  <!-- أمثلة الصور -->
+  <div class="card">
+    <img src="https://github.com/user-attachments/assets/ac1bda7a-03f2-4977-9aaa-24037d4068ea" alt="logo-search-grid-2x (17)">
+    <a href="https://github.com/user-attachments/assets/ac1bda7a-03f2-4977-9aaa-24037d4068ea" target="_blank">تحميل</a>
+  </div>
+  <div class="card">
+    <img src="https://github.com/user-attachments/assets/65a53e2c-5854-48ab-9254-57e65e5d6dfc" alt="لوحات نوات الحكمة الرقمية">
+    <a href="https://github.com/user-attachments/assets/65a53e2c-5854-48ab-9254-57e65e5d6dfc" target="_blank">تحميل</a>
+  </div>
+  <!-- أضف بقية الصور بنفس النمط -->
+</div>
 
-    <label for="currency">اختر العملة للدفع:</label>
-    <select id="currency">
-      <option value="BNB">BNB</option>
-      <option value="BUSD">BUSD</option>
-      <option value="USDT">USDT</option>
-    </select>
+<!-- Lightbox -->
+<div id="lightbox" onclick="this.style.display='none'">
+  <img id="lightbox-img" src="">
+</div>
 
-    <button id="connectWallet">ربط المحفظة</button>
-    <button id="buyToken" disabled>شراء/سك التوكن الآن</button>
+<script>
+  document.querySelectorAll('.card img').forEach(img => {
+    img.addEventListener('click', () => {
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox').style.display = 'flex';
+    });
+  });
+</script>
 
-    <p class="status" id="status">يرجى ربط المحفظة للبدء.</p>
-    <p>للاطلاع على <a href="#">شروط البيع</a> و <a href="#">سياسة الأمان</a>.</p>
-  </main>
-
-  <script>
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    let signer;
-    let presaleContract;
-
-    const PRESALE_CONTRACT_ADDRESS = "0xPUT_YOUR_TESTNET_CONTRACT_ADDRESS_HERE";
-    const PRESALE_ABI = [
-      "function buyTokens(uint256 amount, address paymentToken) public payable"
-    ];
-
-    const connectWalletButton = document.getElementById("connectWallet");
-    const buyButton = document.getElementById("buyToken");
-    const status = document.getElementById("status");
-    const amountInput = document.getElementById("amount");
-    const currencySelect = document.getElementById("currency");
-    const tokensLeftDiv = document.getElementById("tokensLeft");
-
-    let totalTokens = 1000000; // اجمالي التوكنات للعرض التجريبي
-
-    connectWalletButton.onclick = async () => {
-      try {
-        await provider.send("eth_requestAccounts", []);
-        signer = provider.getSigner();
-        presaleContract = new ethers.Contract(PRESALE_CONTRACT_ADDRESS, PRESALE_ABI, signer);
-        status.innerText = "تم ربط المحفظة بنجاح!";
-        buyButton.disabled = false;
-      } catch(err) {
-        status.innerText = "خطأ في ربط المحفظة: " + err.message;
-      }
-    };
-
-    buyButton.onclick = async () => {
-      const amount = parseInt(amountInput.value);
-      if(!amount || amount <= 0) {
-        status.innerText = "الرجاء إدخال عدد صحيح من التوكنات.";
-        return;
-      }
-      if(amount > totalTokens) {
-        status.innerText = "الكمية المطلوبة تتجاوز التوكنات المتبقية.";
-        return;
-      }
-
-      const currency = currencySelect.value;
-
-      try {
-        status.innerText = "جاري تنفيذ العملية...";
-        let tx;
-
-        if(currency === "BNB") {
-          const pricePerTokenBNB = ethers.utils.parseEther("0.01");
-          const totalCost = pricePerTokenBNB.mul(amount);
-          tx = await presaleContract.buyTokens(amount, "0x0000000000000000000000000000000000000000", { value: totalCost });
-        } else {
-          status.innerText = "معالجة الدفع بعملة " + currency + " (يجب تنفيذ الموافقة مسبقًا).";
-          return;
-        }
-
-        await tx.wait();
-        totalTokens -= amount;
-        tokensLeftDiv.innerText = "التوكنات المتبقية للبيع: " + totalTokens;
-        status.innerText = "تم شراء التوكن بنجاح! المعاملة: " + tx.hash;
-      } catch(err) {
-        status.innerText = "خطأ في الشراء: " + err.message;
-      }
-    };
-  </script>
 </body>
 </html>
