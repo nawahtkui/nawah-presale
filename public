@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نموذج عضوية Nawah مع NFT</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+    }
+    .form-container {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #ff9900;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #ff9900;
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    button:hover {
+      background-color: #e68a00;
+    }
+    .nft-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      justify-content: center;
+    }
+    .nft-preview img {
+      width: 70px;
+      height: 70px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .social-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1rem;
+    }
+    .social-buttons a {
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      color: #fff;
+    }
+    .twitter {
+      background-color: #1da1f2;
+    }
+    .facebook {
+      background-color: #1877f2;
+    }
+    .whatsapp {
+      background-color: #25d366;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>نموذج عضوية Nawah</h1>
+    <div class="nft-preview" id="nftPreview"></div>
+    <form id="membershipForm"></form>
+    <button onclick="submitForm()">تسجيل</button>
+    <div class="social-buttons">
+      <a href="https://twitter.com/intent/tweet?text=انضموا%20إلى%20نموذج%20عضوية%20Nawah%20الجديد%20مع%20NFT%20حصري!" class="twitter" target="_blank">Twitter</a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://example.com" class="facebook" target="_blank">Facebook</a>
+      <a href="https://wa.me/?text=انضموا%20إلى%20نموذج%20عضوية%20Nawah%20الجديد%20مع%20NFT%20حصري!" class="whatsapp" target="_blank">WhatsApp</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('membershipForm');
+    const nftContainer = document.getElementById('nftPreview');
+    const jsonURL = 'https://raw.githubusercontent.com/nawahtkui/nawah-token-ui/70d3140f65e7fc5413941ab21b23cc8836291f40/public/nawah_membership_form.json';
+
+    // صور NFT حقيقية للفنانين الفائزين بجوائز الأوسكار والغرامي 2025
+    const nftImages = [
+      'https://example.com/nft1.jpg', // استبدل هذا بالرابط الفعلي لصورة NFT
+      'https://example.com/nft2.jpg', // استبدل هذا بالرابط الفعلي لصورة NFT
+      'https://example.com/nft3.jpg'  // استبدل هذا بالرابط الفعلي لصورة NFT
+    ];
+
+    nftImages.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      nftContainer.appendChild(img);
+    });
+
+    fetch(jsonURL)
+      .then(res => res.json())
+      .then(data => {
+        data.fields.forEach(field => {
+          const label = document.createElement('label');
+          label.textContent = field.label;
+          const input = document.createElement('input');
+          input.type = field.type;
+          input.name = field.name;
+          if (field.required) input.required = true;
+          form.appendChild(label);
+          form.appendChild(input);
+        });
+      });
+
+    function submitForm() {
+      const formData = {};
+      new FormData(form).forEach((value, key) => { formData[key] = value; });
+      console.log('تم إرسال النموذج:', formData);
+      alert('تم إرسال نموذج العضوية بنجاح!');
+    }
+  </script>
+</body>
+</html>
