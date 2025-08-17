@@ -1,0 +1,42 @@
+<svg width="900" height="700" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box { fill: #e0f2fe; stroke: #0369a1; stroke-width: 2px; rx: 10px; }
+    .text { font-family: Arial, sans-serif; font-size: 14px; fill: #0c4a6e; }
+    .arrow { fill: none; stroke: #0369a1; stroke-width: 2px; marker-end: url(#arrowhead); }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#0369a1"/>
+    </marker>
+  </defs>
+
+  <!-- Flow -->
+  <rect x="350" y="20" width="200" height="50" class="box"/>
+  <text x="450" y="50" text-anchor="middle" class="text">Total Supply: 100M NWTK</text>
+
+  <rect x="350" y="120" width="200" height="50" class="box"/>
+  <text x="450" y="150" text-anchor="middle" class="text">Token Distribution</text>
+
+  <rect x="100" y="220" width="250" height="50" class="box"/>
+  <text x="225" y="250" text-anchor="middle" class="text">Liquidity (PancakeSwap + USDT)</text>
+
+  <rect x="500" y="220" width="300" height="50" class="box"/>
+  <text x="650" y="250" text-anchor="middle" class="text">Incentives & Rewards (Airdrops/Quests)</text>
+
+  <rect x="350" y="320" width="200" height="50" class="box"/>
+  <text x="450" y="350" text-anchor="middle" class="text">NFT Minting</text>
+
+  <rect x="350" y="420" width="200" height="50" class="box"/>
+  <text x="450" y="450" text-anchor="middle" class="text">Marketplace</text>
+
+  <rect x="350" y="520" width="200" height="50" class="box"/>
+  <text x="450" y="550" text-anchor="middle" class="text">Wallet Integration</text>
+
+  <!-- Arrows -->
+  <line x1="450" y1="70" x2="450" y2="120" class="arrow"/>
+  <line x1="450" y1="170" x2="225" y2="220" class="arrow"/>
+  <line x1="450" y1="170" x2="650" y2="220" class="arrow"/>
+  <line x1="450" y1="270" x2="450" y2="320" class="arrow"/>
+  <line x1="450" y1="370" x2="450" y2="420" class="arrow"/>
+  <line x1="450" y1="470" x2="450" y2="520" class="arrow"/>
+</svg>

@@ -1,0 +1,33 @@
+<svg width="950" height="600" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box { fill: #fef9c3; stroke: #ca8a04; stroke-width: 2px; rx: 10px; }
+    .text { font-family: Arial, sans-serif; font-size: 14px; fill: #713f12; }
+    .arrow { fill: none; stroke: #ca8a04; stroke-width: 2px; marker-end: url(#arrowhead); }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ca8a04"/>
+    </marker>
+  </defs>
+
+  <rect x="375" y="20" width="200" height="50" class="box"/>
+  <text x="475" y="50" text-anchor="middle" class="text">Core Contract (NWTK)</text>
+
+  <rect x="100" y="150" width="200" height="50" class="box"/>
+  <text x="200" y="180" text-anchor="middle" class="text">Staking Contract</text>
+
+  <rect x="375" y="150" width="200" height="50" class="box"/>
+  <text x="475" y="180" text-anchor="middle" class="text">Options Contract</text>
+
+  <rect x="650" y="150" width="200" height="50" class="box"/>
+  <text x="750" y="180" text-anchor="middle" class="text">Betting Contract</text>
+
+  <rect x="375" y="280" width="200" height="50" class="box"/>
+  <text x="475" y="310" text-anchor="middle" class="text">Futures Contract</text>
+
+  <!-- Arrows -->
+  <line x1="475" y1="70" x2="200" y2="150" class="arrow"/>
+  <line x1="475" y1="70" x2="475" y2="150" class="arrow"/>
+  <line x1="475" y1="70" x2="750" y2="150" class="arrow"/>
+  <line x1="475" y1="200" x2="475" y2="280" class="arrow"/>
+</svg>
