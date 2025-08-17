@@ -9,7 +9,6 @@
 4. قبل الشراء، قم بتعديل `PRESALE_CONTRACT_ADDRESS` إلى عنوان عقد السك على Testnet أو Mainnet.
 5. لتجربة BUSD/USDT يجب تنفيذ الموافقة (`approve`) على العقد قبل الدفع.
 
-
 # Project Diagrams
 
 هذا المجلد يحتوي على الرسوم التوضيحية الخاصة بمشروع **نواة**.  
@@ -40,3 +39,4 @@
 
 ```markdown
 ![CI/CD Flow](docs/diagrams/ci-cd.svg)
+
