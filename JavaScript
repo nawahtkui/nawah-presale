@@ -1,0 +1,95 @@
+// تأكد من تضمين ethers.js في الصفحة
+// <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+
+const connectBtn = document.getElementById("connectWallet");
+const walletAddressEl = document.getElementById("walletAddress");
+const bnbBalanceEl = document.getElementById("bnbBalance");
+const tokenBalancesEl = document.getElementById("tokenBalances");
+const buyAmountEl = document.getElementById("buyAmount");
+const buyBtn = document.getElementById("buyBtn");
+const txStatusEl = document.getElementById("txStatus");
+
+let provider, signer, address;
+
+// قائمة التوكنات BEP-20 التي تريد عرض رصيدها
+const tokens = [
+  { symbol: "NWTK", address: "0x...عـنوان عقد NWTK هنا" },
+  { symbol: "USDT", address: "0x55d398326f99059fF775485246999027B3197955" }
+];
+
+const tokenABI = [
+  "function balanceOf(address owner) view returns (uint256)",
+  "function decimals() view returns (uint8)",
+  "function symbol() view returns (string)"
+];
+
+// عنوان عقد Presale الذي يستقبل المدفوعات
+const presaleAddress = "0x...عنوان عقد Presale هنا";
+
+// توصيل المحفظة
+connectBtn.addEventListener("click", async () => {
+  if (window.ethereum) {
+    provider = new ethers.BrowserProvider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    signer = await provider.getSigner();
+    address = await signer.getAddress();
+    walletAddressEl.textContent = address;
+    fetchBalances();
+
+    window.ethereum.on("accountsChanged", fetchBalances);
+    window.ethereum.on("chainChanged", fetchBalances);
+  } else {
+    alert("يرجى تثبيت MetaMask أو محفظة تدعم Binance Smart Chain");
+  }
+});
+
+// دالة لتنسيق الرصيد مع دعم "∞"
+function formatBalance(balance) {
+  const etherVal = parseFloat(ethers.formatEther(balance));
+  return etherVal > 1e9 ? "∞" : etherVal.toFixed(4);
+}
+
+// جلب رصيد BNB ورصيد التوكنات
+async function fetchBalances() {
+  if (!signer) return;
+  const balanceBNB = await provider.getBalance(address);
+  bnbBalanceEl.textContent = formatBalance(balanceBNB);
+
+  tokenBalancesEl.innerHTML = "";
+  for (const token of tokens) {
+    const contract = new ethers.Contract(token.address, tokenABI, provider);
+    const rawBalance = await contract.balanceOf(address);
+    const decimals = await contract.decimals();
+    const formattedBalance = rawBalance / 10 ** decimals;
+    tokenBalancesEl.innerHTML += `<p>${token.symbol}: ${formattedBalance > 1e9 ? "∞" : formattedBalance.toFixed(4)}</p>`;
+  }
+}
+
+// شراء NWTK من Presale
+buyBtn.addEventListener("click", async () => {
+  const amountBNB = parseFloat(buyAmountEl.value);
+  if (!amountBNB || amountBNB <= 0) {
+    alert("أدخل مبلغ صالح للشراء");
+    return;
+  }
+  if (!signer) {
+    alert("يرجى توصيل المحفظة أولاً");
+    return;
+  }
+
+  try {
+    txStatusEl.textContent = "جاري إرسال المعاملة...";
+    const tx = await signer.sendTransaction({
+      to: presaleAddress,
+      value: ethers.parseEther(amountBNB.toString())
+    });
+
+    txStatusEl.textContent = `تم إرسال المعاملة: ${tx.hash}`;
+    await tx.wait();
+    txStatusEl.textContent = `تم تأكيد المعاملة: ${tx.hash}`;
+    fetchBalances();
+  } catch (err) {
+    console.error(err);
+    txStatusEl.textContent = `خطأ: ${err.message}`;
+  }
+});
