@@ -1,0 +1,26 @@
+<div id="wallet-section">
+  <button id="connectWallet">توصيل المحفظة</button>
+  <p>العنوان: <span id="walletAddress">غير متصل</span></p>
+  <p>رصيد BNB: <span id="bnbBalance">0</span></p>
+  <div id="tokenBalances"></div>
+</div>
+
+<div id="presale-section">
+  <h3>شراء NWTK</h3>
+  <label>المبلغ (BNB): <input type="number" id="buyAmount" min="0" step="0.01"></label>
+  <button id="buyBtn">شراء</button>
+  <p id="txStatus"></p>
+</div>
+
+<style>
+#wallet-section, #presale-section {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  max-width: 400px;
+}
+button { padding: 8px 12px; margin-top: 10px; cursor: pointer; }
+input { padding: 5px; width: 100px; }
+p { margin: 5px 0; }
+</style>
